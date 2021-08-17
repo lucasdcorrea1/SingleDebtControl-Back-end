@@ -3,11 +3,11 @@ using SingleDebtControl.Domain.Service.Debit.Dto;
 
 namespace SingleDebtControl.Domain.Service.Debit
 {
-    public class DebidService : IDebitService
+    public class DebitService : IDebitService
     {
         private readonly IMapper _mapper;
 
-        public DebidService(IMapper mapper)
+        public DebitService(IMapper mapper)
         {
             _mapper = mapper;
         }
