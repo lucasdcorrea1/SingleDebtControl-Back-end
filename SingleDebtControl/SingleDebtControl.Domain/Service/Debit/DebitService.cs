@@ -14,7 +14,7 @@ namespace SingleDebtControl.Domain.Service.Debit
 
         public DebitDto Get()
         {
-            throw new System.NotImplementedException();
+            return new DebitDto();
         }
 
         public int Post(DebitDto dto)
