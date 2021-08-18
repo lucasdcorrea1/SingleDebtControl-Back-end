@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SingleDebtControl.Domain.Service.Debit.Entities
 {
@@ -7,6 +8,9 @@ namespace SingleDebtControl.Domain.Service.Debit.Entities
     {
         public int Id { get; set; }
         public long Value { get; set; }
-        public string Title { get; set; }
+        public string Description { get; set; }
+
+        public DateTime CreationDate { get; set; }
+        public DateTime LastUpdateDate { get; set; }
     }
 }

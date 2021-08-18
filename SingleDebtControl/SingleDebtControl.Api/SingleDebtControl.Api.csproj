@@ -8,6 +8,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.1.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.1.5" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,7 +20,6 @@
   <ItemGroup>
     <ProjectReference Include="..\SingleDebtControl.Domain\SingleDebtControl.Domain.csproj" />
     <ProjectReference Include="..\SingleDebtControl.Infra\SingleDebtControl.Infra.csproj" />
-    <ProjectReference Include="..\SingleDebtControl.SharedKernel\SingleDebtControl.SharedKernel.csproj" />
   </ItemGroup>
 
 
