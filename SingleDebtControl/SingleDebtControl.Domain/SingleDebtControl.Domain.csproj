@@ -5,12 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SingleDebtControl.SharedKernel\SingleDebtControl.SharedKernel.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Common\" />
-    <Folder Include="Base\" />
   </ItemGroup>
 
   <ItemGroup>

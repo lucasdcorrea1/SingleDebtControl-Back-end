@@ -5,13 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SingleDebtControl.SharedKernel\SingleDebtControl.SharedKernel.csproj" />
+    <ProjectReference Include="..\SingleDebtControl.Domain\SingleDebtControl.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Context\" />
-    <Folder Include="Base\" />
-    <Folder Include="Repositories\" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.9" />
   </ItemGroup>
 
 </Project>

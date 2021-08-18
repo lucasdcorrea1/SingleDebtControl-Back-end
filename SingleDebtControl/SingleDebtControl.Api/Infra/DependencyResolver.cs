@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SingleDebtControl.Domain.Service.Debit;
+using System;
 
 namespace SingleDebtControl.Api.Infra
 {
@@ -17,18 +19,18 @@ namespace SingleDebtControl.Api.Infra
             services.AddSingleton(mapper);
 
 
-            //services.ResolveContexts(x => x.UseNpgsql("",
-            // providerOptions => providerOptions.CommandTimeout(20)));
+            services.ResolveContexts(x => x.UseSqlServer("",
+             providerOptions => providerOptions.CommandTimeout(20)));
 
             Repositories(services);
             Services(services);
         }
 
-        //private static void ResolveContexts(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
-        //{
+        private static void ResolveContexts(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
+        {
 
 
-        //}
+        }
 
         public static void Repositories(IServiceCollection services)
         {
