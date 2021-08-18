@@ -19,13 +19,17 @@ namespace SingleDebtControl.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            #region
+            #region Cors
 
-            services.AddCors(options => {
-                options.AddPolicy("SiteCorsPolicy", builder =>
-                builder.AllowAnyOrigin()
-                 .AllowAnyMethod()
-                 .AllowAnyHeader());
+            services.AddSignalR();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("SiteCorsPolicy", builder => builder
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .SetIsOriginAllowed(origin => true) // allow any origin
+                    .AllowCredentials());
             });
 
             #endregion

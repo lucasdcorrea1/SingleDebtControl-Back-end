@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SingleDebtControl.Domain\SingleDebtControl.Domain.csproj" />
+    <ProjectReference Include="..\Utils.Infra\Utils.Infra.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -10,14 +10,14 @@ namespace SingleDebtControl.Infra.Base
 {
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
-        protected readonly DataContext Context;
+        protected readonly DebitContext Context;
 
-        protected BaseRepository(DataContext context)
+        protected BaseRepository(DebitContext context)
         {
             Context = context;
         }
 
-        public IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter)
+        public IEnumerable<TEntity> Get()
         {
             return Context.Set<TEntity>().ToList();
         }

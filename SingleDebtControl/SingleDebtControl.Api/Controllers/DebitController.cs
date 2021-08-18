@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SingleDebtControl.Domain.Service.Debit;
+using SingleDebtControl.Domain.Service.Debit.Dto;
 
 namespace SingleDebtControl.Api.Controllers
 {
@@ -20,6 +21,28 @@ namespace SingleDebtControl.Api.Controllers
             var debits = _debitService.Get();
 
             return Ok(new { debits });
+        }
+
+        [HttpPost]
+        public IActionResult Post(DebitDto dto)
+        {
+            var response = _debitService.Post(dto);
+
+            if (response <= 0)
+                return BadRequest("Erro ao registrar debito!");
+
+            return Ok(new { response });
+        }
+
+        [HttpPut]
+        public IActionResult Put(DebitDto dto)
+        {
+            var response = _debitService.Put(dto);
+
+            if (!response)
+                return BadRequest("Erro ao atualizar debito!");
+
+            return Ok();
         }
 
     }

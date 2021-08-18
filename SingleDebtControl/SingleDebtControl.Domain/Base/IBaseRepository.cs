@@ -7,7 +7,7 @@ namespace SingleDebtControl.Domain.Base
 {
     public interface IBaseRepository <T> where T : class
     {
-        IEnumerable<T> Get(Expression<Func<T, bool>> filter);
+        IEnumerable<T> Get();
         int Post(T item);
         void Delete(T item);
         void Put(T item);

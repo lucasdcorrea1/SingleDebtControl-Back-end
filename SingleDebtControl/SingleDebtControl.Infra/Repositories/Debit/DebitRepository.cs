@@ -7,7 +7,7 @@ namespace SingleDebtControl.Infra.Repositories.Debit
 {
     public class DebitRepository : BaseRepository<DebitEntity>, IDebitRepository
     {
-        public DebitRepository(DataContext context) : base(context)
+        public DebitRepository(DebitContext context) : base(context)
         {
         }
     }
