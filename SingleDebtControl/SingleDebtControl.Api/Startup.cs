@@ -44,7 +44,7 @@ namespace SingleDebtControl.Api
                         Description = "SingleDebitControl API",
                         Contact = new OpenApiContact
                         {
-                            Name = "Cloudmed",
+                            Name = "SingleDebitControl",
                             Email = "lucas.dcorrea1@gmail.com",
                         }
                     });
