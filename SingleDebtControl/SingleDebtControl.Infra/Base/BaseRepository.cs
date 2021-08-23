@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SingleDebtControl.Domain.Base;
 using SingleDebtControl.Infra.Context;
+using SingleDebtControl.Infra.Repositories.Payment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,10 @@ namespace SingleDebtControl.Infra.Base
         protected BaseRepository(DebitContext context)
         {
             Context = context;
+        }
+
+        public BaseRepository(PaymentContext context)
+        {
         }
 
         public IEnumerable<TEntity> Get()
