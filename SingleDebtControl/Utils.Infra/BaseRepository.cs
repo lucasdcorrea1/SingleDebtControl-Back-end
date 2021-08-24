@@ -1,30 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SingleDebtControl.Domain.Base;
-using SingleDebtControl.Infra.Context;
-using SingleDebtControl.Infra.Repositories.Payment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 
-namespace SingleDebtControl.Infra.Base
+namespace Utils.Infra
 {
-    public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
+    public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
-        protected readonly DebitContext Context;
+        protected readonly DbContext Context;
 
-        protected BaseRepository(DebitContext context)
+        protected BaseRepository(DbContext context)
         {
             Context = context;
-        }
-
-        public BaseRepository(PaymentContext context)
-        {
-        }
-
-        public IEnumerable<TEntity> Get()
-        {
-            return Context.Set<TEntity>().ToList();
         }
         public int Post(TEntity item)
         {
@@ -38,12 +28,29 @@ namespace SingleDebtControl.Infra.Base
 
             return (int)intTried;
         }
+
         public void Put(TEntity item)
         {
             Context.Set<TEntity>().Attach(item);
             Context.Entry(item).State = EntityState.Modified;
             Context.SaveChanges();
         }
+
+        public IEnumerable<TEntity> Get()
+        {
+            return Context.Set<TEntity>().ToList();
+        }
+
+        public IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter)
+        {
+            return Context.Set<TEntity>().Where(filter).ToList();
+        }
+
+        public IEnumerable<TEntity> GetAll()
+        {
+            return Context.Set<TEntity>().ToList();
+        }
+
         public void Delete(TEntity item)
         {
             Context.Set<TEntity>().Remove(item);

@@ -4,19 +4,20 @@ GO
 USE  "DebitControl"
 
 CREATE TABLE Debit(
-	Id					INTEGER IDENTITY(1, 1),
-	Value				BIGINT,
-	Description			VARCHAR(MAX),
-	CreationDate		DATETIME,
-	LastUpdateDate		DATETIME,
+	Id					INTEGER IDENTITY(1, 1) NOT NULL,
+	Value				BIGINT NOT NULL,
+	Description			VARCHAR(MAX) NOT NULL,
+	Active				BIT NOT NULL,
+	CreationDate		DATETIME NOT NULL,
+	LastUpdateDate		DATETIME NULL,
 	CONSTRAINT PK_Debit PRIMARY KEY(Id),
 )
 GO
 
  CREATE TABLE Payment(
-	Id					INTEGER IDENTITY(1, 1),
-	Id_Debit			INTEGER,
-	Value				BIGINT,
+	Id					INTEGER IDENTITY(1, 1) NOT NULL,
+	Id_Debit			INTEGER NOT NULL,
+	Value				BIGINT NOT NULL,
 	Description			VARCHAR(MAX) NULL,
 	CreationDate		DATETIME,
 	CONSTRAINT PK_Payment PRIMARY KEY(Id),
@@ -25,11 +26,11 @@ GO
 GO
 
  CREATE TABLE PaymentHistory(
-	Id					INTEGER IDENTITY(1, 1),
-	Id_Debit			INTEGER,
+	Id					INTEGER IDENTITY(1, 1) NOT NULL,
+	Id_Debit			INTEGER NOT NULL,
 	Id_Payment          INTEGER NULL,
-	RegisterDate		DATETIME,
-	Observation			NVARCHAR(MAX),
+	RegisterDate		DATETIME NOT NULL,
+	Observation			NVARCHAR(MAX) NOT NULL,
 	CONSTRAINT PK_DebitHistory PRIMARY KEY(Id),
 	CONSTRAINT FK_Debit_DebitHistory FOREIGN KEY (Id_Debit) REFERENCES Debit(Id),
 	CONSTRAINT FK_Payment_DebitHistory FOREIGN KEY (Id_Payment) REFERENCES Debit(Id),

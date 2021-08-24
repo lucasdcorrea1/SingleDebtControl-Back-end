@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SingleDebtControl.Domain.Service.Payment.Entities
@@ -7,6 +8,8 @@ namespace SingleDebtControl.Domain.Service.Payment.Entities
     [Table("Payment")]
     public class PaymentEntity
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [ForeignKey("Debit")]
