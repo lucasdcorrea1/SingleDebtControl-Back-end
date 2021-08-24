@@ -41,6 +41,11 @@ namespace Utils.Infra
             return Context.Set<TEntity>().ToList();
         }
 
+        public IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter)
+        {
+            return Context.Set<TEntity>().Where(filter).ToList();
+        }
+
         public IEnumerable<TEntity> GetAll()
         {
             return Context.Set<TEntity>().ToList();
