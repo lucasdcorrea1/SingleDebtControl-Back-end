@@ -1,7 +1,7 @@
 ﻿using SingleDebtControl.Domain.Service.Debit;
 using SingleDebtControl.Domain.Service.Debit.Entities;
-using SingleDebtControl.Infra.Base;
 using SingleDebtControl.Infra.Context;
+using Utils.Infra;
 
 namespace SingleDebtControl.Infra.Repositories.Debit
 {

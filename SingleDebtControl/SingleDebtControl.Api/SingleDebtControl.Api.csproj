@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SingleDebtControl.Domain\SingleDebtControl.Domain.csproj" />
     <ProjectReference Include="..\SingleDebtControl.Infra\SingleDebtControl.Infra.csproj" />
   </ItemGroup>

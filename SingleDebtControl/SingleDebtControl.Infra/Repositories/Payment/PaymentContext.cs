@@ -8,6 +8,6 @@ namespace SingleDebtControl.Infra.Repositories.Payment
         public PaymentContext(DbContextOptions<PaymentContext> options) : base(options)
         {
         }
-        public DbSet<PaymentEntity> Debit { get; set; }
+        public DbSet<PaymentEntity> Payment { get; set; }
     }
 }

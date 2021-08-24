@@ -1,5 +1,7 @@
 ﻿using SingleDebtControl.Domain.Service.Debit.Dto;
 using SingleDebtControl.Domain.Service.Debit.Entities;
+using SingleDebtControl.Domain.Service.Payment.Dto;
+using SingleDebtControl.Domain.Service.Payment.Entities;
 
 namespace SingleDebtControl.Api.Infra
 {
@@ -9,6 +11,9 @@ namespace SingleDebtControl.Api.Infra
         {
             CreateMap<DebitEntity, DebitDto>();
             CreateMap<DebitDto, DebitEntity>();
+
+            CreateMap<PaymentEntity, PaymentDto>();
+            CreateMap<PaymentDto, PaymentEntity>();
         }
     }
 }

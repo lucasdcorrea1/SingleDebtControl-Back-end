@@ -1,6 +1,8 @@
 ﻿
 using AutoMapper;
 using SingleDebtControl.Domain.Service.Payment.Dto;
+using SingleDebtControl.Domain.Service.Payment.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace SingleDebtControl.Domain.Service.Payment
@@ -8,25 +10,34 @@ namespace SingleDebtControl.Domain.Service.Payment
     public class PaymentService : IPaymentService
     {
         private readonly IMapper _mapper;
+        private readonly IPaymentRepository _paymentRepository;
 
-        public PaymentService(IMapper mapper)
+        public PaymentService(IMapper mapper, IPaymentRepository paymentRepository)
         {
             _mapper = mapper;
+            _paymentRepository = paymentRepository;
         }
 
         public IEnumerable<PaymentDto> Get()
         {
-            throw new System.NotImplementedException();
+            return _mapper.Map<IEnumerable<PaymentDto>>(_paymentRepository.Get());
         }
 
         public int Post(PaymentDto dto)
         {
-            throw new System.NotImplementedException();
+
+            dto.CreationDate = DateTime.Now;
+            var id = _paymentRepository.Post(_mapper.Map<PaymentEntity>(dto));
+            return id;
         }
 
         public bool Put(PaymentDto dto)
         {
-            throw new System.NotImplementedException();
+
+            _paymentRepository.Put(_mapper.Map<PaymentEntity>(dto));
+
+            return true;
         }
+
     }
 }

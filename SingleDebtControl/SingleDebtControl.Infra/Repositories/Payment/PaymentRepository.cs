@@ -1,6 +1,6 @@
 ﻿using SingleDebtControl.Domain.Service.Payment;
 using SingleDebtControl.Domain.Service.Payment.Entities;
-using SingleDebtControl.Infra.Base;
+using Utils.Infra;
 
 namespace SingleDebtControl.Infra.Repositories.Payment
 {
