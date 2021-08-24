@@ -97,7 +97,7 @@ namespace SingleDebtControl.Api
             app.UseHangfireDashboard();
 
             var debitService = ServiceProvider.GetService<IDebitService>();
-            RecurringJob.AddOrUpdate(() => debitService.Fees(), Cron.DayInterval(1)); 
+            RecurringJob.AddOrUpdate(() => debitService.AddTax(), Cron.DayInterval(1)); 
 
         }
     }

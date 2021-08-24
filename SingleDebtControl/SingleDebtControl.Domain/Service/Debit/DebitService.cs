@@ -20,7 +20,7 @@ namespace SingleDebtControl.Domain.Service.Debit
             _debitRepository = debitRepository;
         }
 
-        public async Task<bool> Fees()
+        public async Task<bool> AddTax()
         {
             var dateNow = DateTime.Now;
             var dateCurrentMonth = new DateTime(dateNow.Year, dateNow.Month, 1);

@@ -10,6 +10,6 @@ namespace SingleDebtControl.Domain.Service.Debit
         int Post(DebitDto dto);
         bool Put(DebitDto dto);
 
-        Task<bool> Fees();
+        Task<bool> AddTax();
     }
 }
