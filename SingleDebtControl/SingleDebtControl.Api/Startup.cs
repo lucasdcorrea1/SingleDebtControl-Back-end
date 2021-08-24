@@ -1,3 +1,5 @@
+using Hangfire;
+using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -5,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using SingleDebtControl.Api.Infra;
+using SingleDebtControl.Domain.Service.Debit;
+using System;
 
 namespace SingleDebtControl.Api
 {
@@ -16,6 +20,7 @@ namespace SingleDebtControl.Api
         }
 
         public IConfiguration Configuration { get; }
+        public ServiceProvider ServiceProvider { get; set; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -28,10 +33,15 @@ namespace SingleDebtControl.Api
                 options.AddPolicy("SiteCorsPolicy", builder => builder
                     .AllowAnyMethod()
                     .AllowAnyHeader()
-                    .SetIsOriginAllowed(origin => true) // allow any origin
+                    .SetIsOriginAllowed(origin => true)
                     .AllowCredentials());
             });
 
+            #endregion
+
+            #region Hangfire
+            services.AddHangfire(x => x.UseSqlServerStorage("data source=DESKTOP-NK2FLPE\\SQLUCAS;initial catalog=DebitControl;password=cloudmed; user id=sa"));
+            services.AddHangfireServer();
             #endregion
 
             services.AddSwaggerGen(c =>
@@ -53,6 +63,8 @@ namespace SingleDebtControl.Api
             services.AddControllers();
 
             services.Resolve();
+
+            ServiceProvider = services.BuildServiceProvider();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -77,11 +89,16 @@ namespace SingleDebtControl.Api
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "SingleDebitControl v1.0");
             });
 
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+            app.UseHangfireDashboard();
+
+            var debitService = ServiceProvider.GetService<IDebitService>();
+            RecurringJob.AddOrUpdate(() => debitService.Fees(), Cron.DayInterval(1)); 
+
         }
     }
 }

@@ -38,6 +38,14 @@ namespace SingleDebtControl.Domain.Service.Payment
                 if (debitEntity == null)
                     return 0;
 
+
+                var dateNow = DateTime.Now;
+                var dateCurrentMonth = new DateTime(dateNow.Year, dateNow.Month, 1);
+
+                var LastDayMonth = dateCurrentMonth.AddMonths(1).AddDays(-1).Day;
+                if (debitEntity.CreationDate.Day == LastDayMonth)
+                    return 0;
+
                 debitEntity.LastUpdateDate = DateTime.Now;
                 debitEntity.Active = false;
                 _debitRepository.Put(debitEntity);
@@ -63,7 +71,6 @@ namespace SingleDebtControl.Domain.Service.Payment
 
         public bool Put(PaymentDto dto)
         {
-
             _paymentRepository.Put(_mapper.Map<PaymentEntity>(dto));
 
             return true;

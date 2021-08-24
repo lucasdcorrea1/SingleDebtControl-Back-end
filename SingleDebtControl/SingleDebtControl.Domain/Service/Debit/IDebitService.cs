@@ -1,5 +1,6 @@
 ﻿using SingleDebtControl.Domain.Service.Debit.Dto;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SingleDebtControl.Domain.Service.Debit
 {
@@ -8,6 +9,7 @@ namespace SingleDebtControl.Domain.Service.Debit
         IEnumerable<DebitDto> Get();
         int Post(DebitDto dto);
         bool Put(DebitDto dto);
-        
+
+        Task<bool> Fees();
     }
 }
