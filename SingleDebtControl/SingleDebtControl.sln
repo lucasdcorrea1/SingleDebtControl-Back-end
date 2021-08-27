@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SingleDebtControl.Infra", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utils", "Utils", "{AD96805B-F1BD-47EF-9E83-2CCB53A5FD00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.Infra", "Utils.Infra\Utils.Infra.csproj", "{B41A1CB0-753D-49F4-94D4-2DB8EF9D2C14}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils.Infra", "Utils.Infra\Utils.Infra.csproj", "{B41A1CB0-753D-49F4-94D4-2DB8EF9D2C14}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.Message", "Utils.Message\Utils.Message.csproj", "{8D7C9536-F94B-436A-BCA3-DE96DD442F50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{B41A1CB0-753D-49F4-94D4-2DB8EF9D2C14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B41A1CB0-753D-49F4-94D4-2DB8EF9D2C14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B41A1CB0-753D-49F4-94D4-2DB8EF9D2C14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D7C9536-F94B-436A-BCA3-DE96DD442F50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D7C9536-F94B-436A-BCA3-DE96DD442F50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D7C9536-F94B-436A-BCA3-DE96DD442F50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D7C9536-F94B-436A-BCA3-DE96DD442F50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 		{683DE07F-0A51-4625-A7AC-D05FE6C81C37} = {288ADC86-5A1C-46AD-8499-4C76D9EB9011}
 		{ECC5C4B4-0900-486F-84D7-934908F004F7} = {288ADC86-5A1C-46AD-8499-4C76D9EB9011}
 		{B41A1CB0-753D-49F4-94D4-2DB8EF9D2C14} = {AD96805B-F1BD-47EF-9E83-2CCB53A5FD00}
+		{8D7C9536-F94B-436A-BCA3-DE96DD442F50} = {AD96805B-F1BD-47EF-9E83-2CCB53A5FD00}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {973C325C-11F9-46B1-9DEF-F4E4922FA261}

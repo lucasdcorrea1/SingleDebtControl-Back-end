@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SingleDebtControl.Domain.Service.Debit;
 using SingleDebtControl.Domain.Service.Debit.Dto;
+using Utils.Message;
 
 namespace SingleDebtControl.Api.Controllers
 {
@@ -9,10 +10,12 @@ namespace SingleDebtControl.Api.Controllers
     public class DebitController : Controller
     {
         private readonly IDebitService _debitService;
+        private readonly IMessageErrorService _messageError;
 
-        public DebitController(IDebitService debitService)
+        public DebitController(IDebitService debitService, IMessageErrorService messageError)
         {
             _debitService = debitService;
+            _messageError = messageError;
         }
 
         [HttpGet]
@@ -23,13 +26,21 @@ namespace SingleDebtControl.Api.Controllers
             return Ok(new { debits });
         }
 
+        [HttpGet("ative")]
+        public IActionResult GetAtives()
+        {
+            var debits = _debitService.Get(true);
+
+            return Ok(new { debits });
+        }
+
         [HttpPost]
         public IActionResult Post(DebitDto dto)
         {
             var response = _debitService.Post(dto);
 
-            if (response <= 0)
-                return BadRequest("Erro ao registrar debito!");
+            if (_messageError.Any())
+                return BadRequest(_messageError.GetMessageError());
 
             return Ok(new { response });
         }
@@ -39,10 +50,10 @@ namespace SingleDebtControl.Api.Controllers
         {
             var response = _debitService.Put(dto);
 
-            if (!response)
-                return BadRequest("Erro ao atualizar debito!");
+            if (_messageError.Any())
+                return BadRequest(_messageError.GetMessageError());
 
-            return Ok();
+            return Ok(response);
         }
 
     }
