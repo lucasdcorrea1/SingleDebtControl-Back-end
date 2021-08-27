@@ -1,6 +1,9 @@
 CREATE DATABASE "DebitControl"
 GO 
 
+CREATE DATABASE HangfireTest
+GO
+
 USE  "DebitControl"
 
 CREATE TABLE Debit(

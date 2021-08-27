@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace Utils.Infra
 {
@@ -44,11 +43,6 @@ namespace Utils.Infra
         public IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter)
         {
             return Context.Set<TEntity>().Where(filter).ToList();
-        }
-
-        public IEnumerable<TEntity> GetAll()
-        {
-            return Context.Set<TEntity>().ToList();
         }
 
         public void Delete(TEntity item)

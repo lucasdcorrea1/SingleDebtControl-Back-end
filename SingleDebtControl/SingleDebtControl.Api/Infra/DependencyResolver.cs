@@ -7,6 +7,7 @@ using SingleDebtControl.Infra.Context;
 using SingleDebtControl.Infra.Repositories.Debit;
 using SingleDebtControl.Infra.Repositories.Payment;
 using System;
+using Utils.Message;
 
 namespace SingleDebtControl.Api.Infra
 {
@@ -45,6 +46,7 @@ namespace SingleDebtControl.Api.Infra
         {
             services.AddScoped<IDebitService, DebitService>();
             services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IMessageErrorService, MessageErrorService>();
         }
     }
 }

@@ -29,6 +29,7 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
+.nuget/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
@@ -36,7 +37,10 @@ bld/
 #wwwroot/
 
 # Visual Studio 2017 auto generated files
-Generated\ Files/
+Generated/ Files/
+
+# Visual Studio Code settings
+.vscode/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
@@ -348,22 +352,11 @@ healthchecksdb
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
 MigrationBackup/
 
-# Logs
-logs/
+# Ionide (cross platform F# VS Code tools) working folder
+.ionide/
 
-# JetBrains Rider
-.idea/
-*.sln.iml
+# Nuget package files
+.nuget/
 
-# Local config files
-appsettings.local.json
-/ModuleTemplate/ComputationModule/.config
-/ModuleTemplate/ComputationModule/Dockerfile
-/ModuleTemplate/ComputationModule/appsettings.Development.json
-/ModuleTemplate/ComputationModule/appsettings.json
-/ModuleTemplate/ComputationModule/Properties
-/Computation Module Template C#/ComputationModule/.config
-/Computation Module Template C#/ComputationModule/appsettings.Development.json
-/Computation Module Template C#/ComputationModule/appsettings.json
-/Computation Module Template C#/ComputationModule/Dockerfile
-/Computation Module Template C#/ComputationModule/Properties
+# Config Json file
+/SingleDebtControl/SingleDebtControl.Api/appsettings.Production.json

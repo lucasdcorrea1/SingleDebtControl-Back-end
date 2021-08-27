@@ -1,5 +1,4 @@
 using Hangfire;
-using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -40,7 +39,7 @@ namespace SingleDebtControl.Api
             #endregion
 
             #region Hangfire
-            services.AddHangfire(x => x.UseSqlServerStorage("data source=DESKTOP-NK2FLPE\\SQLUCAS;initial catalog=DebitControl;password=cloudmed; user id=sa"));
+            services.AddHangfire(x => x.UseSqlServerStorage("data source=DESKTOP-NK2FLPE\\SQLUCAS;initial catalog=HangfireTest;password=cloudmed; user id=sa"));
             services.AddHangfireServer();
             #endregion
 
@@ -56,6 +55,7 @@ namespace SingleDebtControl.Api
                         {
                             Name = "SingleDebitControl",
                             Email = "lucas.dcorrea1@gmail.com",
+                            Url = new Uri("https://localhost/Debit")
                         }
                     });
             });
@@ -86,7 +86,7 @@ namespace SingleDebtControl.Api
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "SingleDebitControl v1.0");
+                c.SwaggerEndpoint("../swagger/v1/swagger.json", "SingleDebitControl v1.0");
             });
 
             app.UseEndpoints(endpoints =>
@@ -98,7 +98,6 @@ namespace SingleDebtControl.Api
 
             var debitService = ServiceProvider.GetService<IDebitService>();
             RecurringJob.AddOrUpdate(() => debitService.AddTax(), Cron.DayInterval(1)); 
-
         }
     }
 }

@@ -7,6 +7,7 @@ namespace SingleDebtControl.Domain.Service.Debit
     public interface IDebitService
     {
         IEnumerable<DebitDto> Get();
+        IEnumerable<DebitDto> Get(bool ative);
         int Post(DebitDto dto);
         bool Put(DebitDto dto);
 

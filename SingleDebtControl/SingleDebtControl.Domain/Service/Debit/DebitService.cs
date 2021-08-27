@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Transactions;
+using Utils.Message;
 
 namespace SingleDebtControl.Domain.Service.Debit
 {
@@ -13,11 +13,13 @@ namespace SingleDebtControl.Domain.Service.Debit
     {
         private readonly IMapper _mapper;
         private readonly IDebitRepository _debitRepository;
+        private readonly IMessageErrorService _messageError;
 
-        public DebitService(IMapper mapper, IDebitRepository debitRepository)
+        public DebitService(IMapper mapper, IDebitRepository debitRepository, IMessageErrorService messageError)
         {
             _mapper = mapper;
             _debitRepository = debitRepository;
+            _messageError = messageError;
         }
 
         public async Task<bool> AddTax()
@@ -27,37 +29,33 @@ namespace SingleDebtControl.Domain.Service.Debit
 
             var LastDayMonth = dateCurrentMonth.AddMonths(1).AddDays(-1).Day;
             if (dateNow.Day != LastDayMonth)
-                return false;
+                return _messageError.AddWithReturn<bool>("Opss... só é permitido adicionar os juros da divida no ultimo dia do mes!");
 
-            using (var transaction = new TransactionScope())
+            var debitEntity = _debitRepository.Get(x => x.Active == true).FirstOrDefault();
+            if (debitEntity == null)
+                return _messageError.AddWithReturn<bool>("Não existe nenhum debito ativo!");
+
+            if (debitEntity.CreationDate.Day == dateNow.Day)
+                return _messageError.AddWithReturn<bool>("N");
+
+            debitEntity.LastUpdateDate = DateTime.Now;
+            debitEntity.Active = false;
+            _debitRepository.Put(debitEntity);
+
+            var value = debitEntity.Value;
+            var percent = 1.0 / 100.0;
+
+            var debitDto = new DebitDto
             {
-                var debitEntity = _debitRepository.Get(x => x.Active == true).FirstOrDefault();
-                if (debitEntity == null)
-                    return false;
+                Value = ((long)(value + (percent * value))),
+                Active = true,
+                Description = debitEntity.Description,
+                CreationDate = DateTime.Now,
+            };
 
-                if (debitEntity.CreationDate.Day == dateNow.Day)
-                    return false;
+            _debitRepository.Post(_mapper.Map<DebitEntity>(debitDto));
 
-                debitEntity.LastUpdateDate = DateTime.Now;
-                debitEntity.Active = false;
-                _debitRepository.Put(debitEntity);
-
-                var value = debitEntity.Value;
-                var percent = 1.0 / 100.0;
-
-                var debitDto = new DebitDto
-                {
-                    Value = ((long)(value + (percent * value))),
-                    Active = true,
-                    Description = debitEntity.Description,
-                    CreationDate = DateTime.Now,
-                };
-
-                _debitRepository.Post(_mapper.Map<DebitEntity>(debitDto));
-
-                transaction.Complete();
-                return true;
-            }
+            return true;
         }
 
         public IEnumerable<DebitDto> Get()
@@ -65,19 +63,30 @@ namespace SingleDebtControl.Domain.Service.Debit
             return _mapper.Map<IEnumerable<DebitDto>>(_debitRepository.Get());
         }
 
+        public IEnumerable<DebitDto> Get(bool active)
+        {
+            return _mapper.Map<IEnumerable<DebitDto>>(_debitRepository.Get(x => x.Active == true));
+        }
+
         public int Post(DebitDto dto)
         {
+            var debitEntity = _debitRepository.Get(x => x.Active == true).FirstOrDefault();
+            if (debitEntity != null)
+                return _messageError.AddWithReturn<int>("Já existe uma divida aberta!");
 
             dto.LastUpdateDate = DateTime.Now;
             dto.CreationDate = DateTime.Now;
-            var id = _debitRepository.Post(_mapper.Map<DebitEntity>(dto));
-            return id;
+
+            return _debitRepository.Post(_mapper.Map<DebitEntity>(dto));
         }
 
         public bool Put(DebitDto dto)
         {
-            dto.LastUpdateDate = DateTime.Now;
+            var debitEntity = _debitRepository.Get(x => x.Id == dto.Id).FirstOrDefault();
+            if (debitEntity == null)
+                return _messageError.AddWithReturn<bool>("Não localizamos a divida para realizarmos o update!");
 
+            dto.LastUpdateDate = DateTime.Now;
             _debitRepository.Put(_mapper.Map<DebitEntity>(dto));
 
             return true;
