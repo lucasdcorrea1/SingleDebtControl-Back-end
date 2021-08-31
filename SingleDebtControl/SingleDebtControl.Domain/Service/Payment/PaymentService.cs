@@ -33,6 +33,9 @@ namespace SingleDebtControl.Domain.Service.Payment
 
         public int Post(PaymentDto dto)
         {
+            if (dto == null)
+                return _messageError.AddWithReturn<int>("Ops... é obrigatório informar os dados do pagamento!");
+
             var debitEntity = _debitRepository.Get(x => x.Id == dto.Id_Debit && x.Active == true).FirstOrDefault();
             if (debitEntity == null)
                 return _messageError.AddWithReturn<int>("Ops... não encontramos o debito para realizar o pagamento!");
@@ -59,13 +62,19 @@ namespace SingleDebtControl.Domain.Service.Payment
             _debitRepository.Post(_mapper.Map<DebitEntity>(debitDto));
 
             dto.CreationDate = DateTime.Now;
-            var id = _paymentRepository.Post(_mapper.Map<PaymentEntity>(dto));
-
-            return id;
+            return _paymentRepository.Post(_mapper.Map<PaymentEntity>(dto));
         }
 
         public bool Put(PaymentDto dto)
         {
+            if (dto == null)
+                return _messageError.AddWithReturn<bool>("Ops... é obrigatório informar os dados para realizar update!");
+
+            if (dto.IsValid(_messageError))
+                return default;
+
+            if (dto.Id <= 0)
+                return _messageError.AddWithReturn<bool>("Ops... é obrigatório informar o pagamento para realizar o update!");
 
             var debitEntity = _paymentRepository.Get(x => x.Id == dto.Id);
             if (debitEntity == null)
