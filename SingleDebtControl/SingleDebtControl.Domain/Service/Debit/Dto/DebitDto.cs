@@ -14,13 +14,10 @@ namespace SingleDebtControl.Domain.Service.Debit.Dto
 
         public bool IsValid(IMessageErrorService messageError)
         {
-            if (Value < 1)
-                return messageError.AddWithReturn<bool>("Ops... não é possível adicionar um débito menor que 1!");
+            messageError.Valid(Value < 1, "Ops... não é possível adicionar um débito menor que zero!");
+            messageError.Valid(string.IsNullOrEmpty(Description), "Ops... uma descrição é obrigatória!");
 
-            if (string.IsNullOrEmpty(Description))
-                return messageError.AddWithReturn<bool>("Ops... uma descrição é obrigatória!");
-
-            return true;
+            return messageError.Any();
         }
     }
 }
