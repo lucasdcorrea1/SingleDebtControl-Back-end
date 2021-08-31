@@ -36,9 +36,15 @@ namespace SingleDebtControl.Domain.Service.Payment
             if (dto == null)
                 return _messageError.AddWithReturn<int>("Ops... é obrigatório informar os dados do pagamento!");
 
-            var debitEntity = _debitRepository.Get(x => x.Id == dto.Id_Debit && x.Active == true).FirstOrDefault();
+            if (dto.IsValid(_messageError))
+                return default;
+
+            var debitEntity = _debitRepository.Get(x => x.Id == dto.Id_Debit).FirstOrDefault();
             if (debitEntity == null)
                 return _messageError.AddWithReturn<int>("Ops... não encontramos o debito para realizar o pagamento!");
+
+            if (!debitEntity.Active)
+                return _messageError.AddWithReturn<int>("Ops... debito informado já foi pago informe um debito ativo!");
 
             var dateNow = DateTime.Now;
             var dateCurrentMonth = new DateTime(dateNow.Year, dateNow.Month, 1);
@@ -47,13 +53,17 @@ namespace SingleDebtControl.Domain.Service.Payment
             if (debitEntity.CreationDate.Day == LastDayMonth)
                 return _messageError.AddWithReturn<int>("Ops... não é possível realizar o pagamento no ultimo dia do mês!");
 
+            var debitValue = debitEntity.Value - dto.Value;
+            if (debitValue < 0)
+                return _messageError.AddWithReturn<int>("Ops... não é possível realizar um pagamento maior que a divida!");
+
             debitEntity.LastUpdateDate = DateTime.Now;
             debitEntity.Active = false;
             _debitRepository.Put(debitEntity);
 
             var debitDto = new DebitDto
             {
-                Value = debitEntity.Value - dto.Value,
+                Value = debitValue,
                 Active = true,
                 Description = debitEntity.Description,
                 CreationDate = DateTime.Now,

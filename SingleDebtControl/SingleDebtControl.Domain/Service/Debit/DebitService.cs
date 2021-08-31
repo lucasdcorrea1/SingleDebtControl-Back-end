@@ -73,7 +73,7 @@ namespace SingleDebtControl.Domain.Service.Debit
             if (dto == null)
                 return _messageError.AddWithReturn<int>("Ops... dados não informados para realizar o cadastro!");
 
-            if (!dto.IsValid(_messageError))
+            if (dto.IsValid(_messageError))
                 return default;
 
             var debitEntity = _debitRepository.Get(x => x.Active == true).FirstOrDefault();
@@ -94,7 +94,7 @@ namespace SingleDebtControl.Domain.Service.Debit
             if (dto.Id <= 0)
                 return _messageError.AddWithReturn<bool>("Ops... é obrigatório informar o debito!");
 
-            if (!dto.IsValid(_messageError))
+            if (dto.IsValid(_messageError))
                 return default;
 
             var debitEntity = _debitRepository.Get(x => x.Id == dto.Id).FirstOrDefault();
