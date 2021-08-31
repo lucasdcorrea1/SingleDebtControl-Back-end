@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SingleDebtControl.Domain.Service.Payment;
 using SingleDebtControl.Domain.Service.Payment.Dto;
+using Utils.Message;
 
 namespace SingleDebtControl.Api.Controllers
 {
@@ -9,10 +10,12 @@ namespace SingleDebtControl.Api.Controllers
     public class PaymentController : Controller
     {
         private readonly IPaymentService _paymentService;
+        private IMessageErrorService _messageError;
 
-        public PaymentController(IPaymentService paymentService)
+        public PaymentController(IPaymentService paymentService, IMessageErrorService messageError)
         {
             _paymentService = paymentService;
+            _messageError = messageError;
         }
 
         [HttpGet]
@@ -28,8 +31,8 @@ namespace SingleDebtControl.Api.Controllers
         {
             var response = _paymentService.Post(dto);
 
-            if (response <= 0)
-                return BadRequest("Erro ao registrar pagamneto!");
+            if (_messageError.Any())
+                return BadRequest(new { message = _messageError.GetMessageError() });
 
             return Ok(new { response });
         }
@@ -39,8 +42,8 @@ namespace SingleDebtControl.Api.Controllers
         {
             var response = _paymentService.Put(dto);
 
-            if (!response)
-                return BadRequest("Erro ao atualizar pagamento!");
+            if (_messageError.Any())
+                return BadRequest(new { message = _messageError.GetMessageError() });
 
             return Ok();
         }

@@ -40,7 +40,7 @@ namespace SingleDebtControl.Api.Controllers
             var response = _debitService.Post(dto);
 
             if (_messageError.Any())
-                return BadRequest(_messageError.GetMessageError());
+                return BadRequest(new { message = _messageError.GetMessageError() });
 
             return Ok(new { response });
         }
@@ -51,7 +51,7 @@ namespace SingleDebtControl.Api.Controllers
             var response = _debitService.Put(dto);
 
             if (_messageError.Any())
-                return BadRequest(_messageError.GetMessageError());
+                return BadRequest(new { message = _messageError.GetMessageError() });
 
             return Ok(response);
         }
