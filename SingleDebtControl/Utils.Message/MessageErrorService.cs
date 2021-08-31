@@ -35,13 +35,10 @@ namespace Utils.Message
 
         public bool Any() => _messagesErrors.Any();
 
-        public bool Valid(bool condition, string value)
+        public bool Valid(bool condition, string message)
         {
-            var notification = _messagesErrors.FirstOrDefault();
-            _messagesErrors.Remove(notification);
-
             if (condition)
-                return AddWithReturn<bool>(value);
+                return AddWithReturn<bool>(message);
 
             return false;
         }
