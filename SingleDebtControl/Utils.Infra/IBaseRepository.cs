@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
-namespace SingleDebtControl.Domain.Base
+namespace Utils.Infra
 {
-    public interface IBaseRepository <T> where T : class
+    public interface IBaseRepository<T> where T : class
     {
         IEnumerable<T> Get();
         IEnumerable<T> Get(Expression<Func<T, bool>> filter);
