@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using SingleDebtControl.Api.Infra;
 using SingleDebtControl.Domain.Service.Debit;
 using System;
+using Utils.Environments;
 
 namespace SingleDebtControl.Api
 {
@@ -23,6 +24,8 @@ namespace SingleDebtControl.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var parameters = new Parameters();
+
             #region Cors
 
             services.AddSignalR();
@@ -36,11 +39,6 @@ namespace SingleDebtControl.Api
                     .AllowCredentials());
             });
 
-            #endregion
-
-            #region Hangfire
-            services.AddHangfire(x => x.UseSqlServerStorage("data source=DESKTOP-NK2FLPE\\SQLUCAS;initial catalog=HangfireTest;password=cloudmed; user id=sa"));
-            services.AddHangfireServer();
             #endregion
 
             services.AddSwaggerGen(c =>
@@ -97,7 +95,7 @@ namespace SingleDebtControl.Api
             app.UseHangfireDashboard();
 
             var debitService = ServiceProvider.GetService<IDebitService>();
-            RecurringJob.AddOrUpdate(() => debitService.AddTax(), Cron.DayInterval(1)); 
+            RecurringJob.AddOrUpdate(() => debitService.AddTax(), Cron.DayInterval(1));
         }
     }
 }

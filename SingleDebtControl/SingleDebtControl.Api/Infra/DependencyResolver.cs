@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SingleDebtControl.Domain.Service.Debit;
@@ -7,6 +8,7 @@ using SingleDebtControl.Infra.Context;
 using SingleDebtControl.Infra.Repositories.Debit;
 using SingleDebtControl.Infra.Repositories.Payment;
 using System;
+using Utils.Environments;
 using Utils.Message;
 
 namespace SingleDebtControl.Api.Infra
@@ -15,6 +17,10 @@ namespace SingleDebtControl.Api.Infra
     {
         public static void Resolve(this IServiceCollection services)
         {
+            services.AddScoped<Parameters>();
+
+            var parameters = new Parameters();
+
             var mappingConfig = new MapperConfiguration(m =>
             {
                 m.AddProfile(new AutoMapperProfile());
@@ -23,8 +29,13 @@ namespace SingleDebtControl.Api.Infra
             var mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
 
-            services.ResolveContexts(x => x.UseSqlServer("data source=DESKTOP-NK2FLPE\\SQLUCAS;initial catalog=DebitControl;password=cloudmed; user id=sa",
+            services.ResolveContexts(x => x.UseSqlServer(parameters.Data.ConnectionString,
                                      providerOptions => providerOptions.CommandTimeout(20)));
+
+            #region Hangfire
+            services.AddHangfire(x => x.UseSqlServerStorage(parameters.Data.ConnectionStringHangfire));
+            services.AddHangfireServer();
+            #endregion
 
             Repositories(services);
             Services(services);
