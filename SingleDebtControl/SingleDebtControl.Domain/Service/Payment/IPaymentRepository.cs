@@ -1,9 +1,9 @@
-﻿using SingleDebtControl.Domain.Base;
-using SingleDebtControl.Domain.Service.Payment.Entities;
+﻿using SingleDebtControl.Domain.Service.Payment.Entities;
+using Utils.Infra;
 
 namespace SingleDebtControl.Domain.Service.Payment
 {
-    public interface IPaymentRepository: IBaseRepository<PaymentEntity>
+    public interface IPaymentRepository : IBaseRepository<PaymentEntity>
     {
     }
 }

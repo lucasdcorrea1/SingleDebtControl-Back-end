@@ -36,7 +36,7 @@ namespace SingleDebtControl.Domain.Service.Debit
                 return _messageError.AddWithReturn<bool>("Não existe nenhum debito ativo!");
 
             if (debitEntity.CreationDate.Day == dateNow.Day)
-                return _messageError.AddWithReturn<bool>("N");
+                return _messageError.AddWithReturn<bool>("Ops... já foi adicionado o juros do mês!");
 
             debitEntity.LastUpdateDate = DateTime.Now;
             debitEntity.Active = false;
@@ -70,9 +70,15 @@ namespace SingleDebtControl.Domain.Service.Debit
 
         public int Post(DebitDto dto)
         {
+            if (dto == null)
+                return _messageError.AddWithReturn<int>("Ops... dados não informados para realizar o cadastro!");
+
+            if (!dto.IsValid(_messageError))
+                return default;
+
             var debitEntity = _debitRepository.Get(x => x.Active == true).FirstOrDefault();
             if (debitEntity != null)
-                return _messageError.AddWithReturn<int>("Já existe uma divida aberta!");
+                return _messageError.AddWithReturn<int>("Ops... já existe uma divida ativa!");
 
             dto.LastUpdateDate = DateTime.Now;
             dto.CreationDate = DateTime.Now;
@@ -82,6 +88,15 @@ namespace SingleDebtControl.Domain.Service.Debit
 
         public bool Put(DebitDto dto)
         {
+            if (dto == null)
+                return _messageError.AddWithReturn<bool>("Ops... dados não informados para realizar update!");
+
+            if (dto.Id <= 0)
+                return _messageError.AddWithReturn<bool>("Ops... é obrigatório informar o debito!");
+
+            if (!dto.IsValid(_messageError))
+                return default;
+
             var debitEntity = _debitRepository.Get(x => x.Id == dto.Id).FirstOrDefault();
             if (debitEntity == null)
                 return _messageError.AddWithReturn<bool>("Não localizamos a divida para realizarmos o update!");

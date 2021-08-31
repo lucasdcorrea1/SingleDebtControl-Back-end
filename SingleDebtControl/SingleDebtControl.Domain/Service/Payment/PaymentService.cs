@@ -1,5 +1,4 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using SingleDebtControl.Domain.Service.Debit;
 using SingleDebtControl.Domain.Service.Debit.Dto;
 using SingleDebtControl.Domain.Service.Debit.Entities;
@@ -8,7 +7,7 @@ using SingleDebtControl.Domain.Service.Payment.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Transactions;
+using Utils.Message;
 
 namespace SingleDebtControl.Domain.Service.Payment
 {
@@ -17,12 +16,14 @@ namespace SingleDebtControl.Domain.Service.Payment
         private readonly IMapper _mapper;
         private readonly IPaymentRepository _paymentRepository;
         private readonly IDebitRepository _debitRepository;
+        private readonly IMessageErrorService _messageError;
 
-        public PaymentService(IMapper mapper, IPaymentRepository paymentRepository, IDebitRepository debitRepository)
+        public PaymentService(IMapper mapper, IPaymentRepository paymentRepository, IDebitRepository debitRepository, IMessageErrorService messageError)
         {
             _mapper = mapper;
             _paymentRepository = paymentRepository;
             _debitRepository = debitRepository;
+            _messageError = messageError;
         }
 
         public IEnumerable<PaymentDto> Get()
@@ -32,45 +33,44 @@ namespace SingleDebtControl.Domain.Service.Payment
 
         public int Post(PaymentDto dto)
         {
-            using (var transaction = new TransactionScope())
+            var debitEntity = _debitRepository.Get(x => x.Id == dto.Id_Debit && x.Active == true).FirstOrDefault();
+            if (debitEntity == null)
+                return _messageError.AddWithReturn<int>("Ops... não encontramos o debito para realizar o pagamento!");
+
+            var dateNow = DateTime.Now;
+            var dateCurrentMonth = new DateTime(dateNow.Year, dateNow.Month, 1);
+
+            var LastDayMonth = dateCurrentMonth.AddMonths(1).AddDays(-1).Day;
+            if (debitEntity.CreationDate.Day == LastDayMonth)
+                return _messageError.AddWithReturn<int>("Ops... não é possível realizar o pagamento no ultimo dia do mês!");
+
+            debitEntity.LastUpdateDate = DateTime.Now;
+            debitEntity.Active = false;
+            _debitRepository.Put(debitEntity);
+
+            var debitDto = new DebitDto
             {
-                var debitEntity = _debitRepository.Get(x => x.Id == dto.Id_Debit && x.Active == true).FirstOrDefault();
-                if (debitEntity == null)
-                    return 0;
+                Value = debitEntity.Value - dto.Value,
+                Active = true,
+                Description = debitEntity.Description,
+                CreationDate = DateTime.Now,
+            };
 
+            _debitRepository.Post(_mapper.Map<DebitEntity>(debitDto));
 
-                var dateNow = DateTime.Now;
-                var dateCurrentMonth = new DateTime(dateNow.Year, dateNow.Month, 1);
+            dto.CreationDate = DateTime.Now;
+            var id = _paymentRepository.Post(_mapper.Map<PaymentEntity>(dto));
 
-                var LastDayMonth = dateCurrentMonth.AddMonths(1).AddDays(-1).Day;
-                if (debitEntity.CreationDate.Day == LastDayMonth)
-                    return 0;
-
-                debitEntity.LastUpdateDate = DateTime.Now;
-                debitEntity.Active = false;
-                _debitRepository.Put(debitEntity);
-
-                var debitDto = new DebitDto
-                {
-                    Value = debitEntity.Value - dto.Value,
-                    Active = true,
-                    Description = debitEntity.Description,
-                    CreationDate = DateTime.Now,
-                };
-
-                _debitRepository.Post(_mapper.Map<DebitEntity>(debitDto));
-
-                dto.CreationDate = DateTime.Now;
-                var id = _paymentRepository.Post(_mapper.Map<PaymentEntity>(dto));
-
-                transaction.Complete();
-
-                return id;
-            }
+            return id;
         }
 
         public bool Put(PaymentDto dto)
         {
+
+            var debitEntity = _paymentRepository.Get(x => x.Id == dto.Id);
+            if (debitEntity == null)
+                return _messageError.AddWithReturn<bool>("Ops... não é possível realizar o pagamento no ultimo dia do mês!");
+
             _paymentRepository.Put(_mapper.Map<PaymentEntity>(dto));
 
             return true;
