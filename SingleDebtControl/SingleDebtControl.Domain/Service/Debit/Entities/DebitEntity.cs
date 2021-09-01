@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SingleDebtControl.Domain.Service.Debit.Entities
 {
-    [Table("Debit")]
+    [Table("Debits")]
     public class DebitEntity
     {
         public int Id { get; set; }

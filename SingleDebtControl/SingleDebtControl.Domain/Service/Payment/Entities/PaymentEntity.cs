@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SingleDebtControl.Domain.Service.Payment.Entities
 {
- 
-    [Table("Payment")]
+
+    [Table("Payments")]
     public class PaymentEntity
     {
         [Key]
