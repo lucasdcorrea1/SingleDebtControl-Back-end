@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <Folder Include="Common\" />
+    <Folder Include="Service\LogRegister\Entities\" />
+    <Folder Include="Service\LogRegister\Dto\" />
   </ItemGroup>
 
   <ItemGroup>
