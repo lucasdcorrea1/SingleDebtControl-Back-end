@@ -11,11 +11,11 @@ namespace SingleDebtControl.Domain.Service.Payment.Dto
         public string Description { get; set; }
         public DateTime CreationDate { get; set; }
 
-        public bool IsValid(IMessageErrorService messageError)
+        public bool IsValid(IMessageService messageError)
         {
-            messageError.Valid(Value < 1, "Ops... é obrigatório pagar um valor maior que zero!");
-            messageError.Valid(Id_Debit <= 0, "Ops... é obrigatório informar o debito a ser descontado!");
-            messageError.Valid(string.IsNullOrEmpty(Description), "Ops... é obrigatório informar uma descrição!");
+            messageError.Valid(Value < 1, "Ops... é obrigatório pagar um valor maior que zero!", "warning");
+            messageError.Valid(Id_Debit <= 0, "Ops... é obrigatório informar o debito a ser descontado!", "warning");
+            messageError.Valid(string.IsNullOrEmpty(Description), "Ops... é obrigatório informar uma descrição!", "warning");
 
             return messageError.Any();
         }

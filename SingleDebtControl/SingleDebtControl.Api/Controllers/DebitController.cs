@@ -10,9 +10,9 @@ namespace SingleDebtControl.Api.Controllers
     public class DebitController : Controller
     {
         private readonly IDebitService _debitService;
-        private readonly IMessageErrorService _messageError;
+        private readonly IMessageService _messageError;
 
-        public DebitController(IDebitService debitService, IMessageErrorService messageError)
+        public DebitController(IDebitService debitService, IMessageService messageError)
         {
             _debitService = debitService;
             _messageError = messageError;
@@ -40,7 +40,7 @@ namespace SingleDebtControl.Api.Controllers
             var response = _debitService.Post(dto);
 
             if (_messageError.Any())
-                return BadRequest(new { message = _messageError.GetMessageError() });
+                return BadRequest(new { messages = _messageError.GetMessageError() });
 
             return Ok(new { response });
         }
@@ -51,7 +51,7 @@ namespace SingleDebtControl.Api.Controllers
             var response = _debitService.Put(dto);
 
             if (_messageError.Any())
-                return BadRequest(new { message = _messageError.GetMessageError() });
+                return BadRequest(new { messages = _messageError.GetMessageError() });
 
             return Ok(response);
         }

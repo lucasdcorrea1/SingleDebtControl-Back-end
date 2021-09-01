@@ -12,10 +12,10 @@ namespace SingleDebtControl.Domain.Service.Debit.Dto
         public DateTime CreationDate { get; set; }
         public DateTime? LastUpdateDate { get; set; }
 
-        public bool IsValid(IMessageErrorService messageError)
+        public bool IsValid(IMessageService messageError)
         {
-            messageError.Valid(Value < 1, "Ops... não é possível adicionar um débito menor que zero!");
-            messageError.Valid(string.IsNullOrEmpty(Description), "Ops... uma descrição é obrigatória!");
+            messageError.Valid(Value < 1, "Ops... não é possível adicionar um débito menor que zero!", "warning");
+            messageError.Valid(string.IsNullOrEmpty(Description), "Ops... uma descrição é obrigatória!", "warning");
 
             return messageError.Any();
         }

@@ -13,9 +13,9 @@ namespace SingleDebtControl.Domain.Service.Debit
     {
         private readonly IMapper _mapper;
         private readonly IDebitRepository _debitRepository;
-        private readonly IMessageErrorService _messageError;
+        private readonly IMessageService _messageError;
 
-        public DebitService(IMapper mapper, IDebitRepository debitRepository, IMessageErrorService messageError)
+        public DebitService(IMapper mapper, IDebitRepository debitRepository, IMessageService messageError)
         {
             _mapper = mapper;
             _debitRepository = debitRepository;
@@ -29,14 +29,14 @@ namespace SingleDebtControl.Domain.Service.Debit
 
             var LastDayMonth = dateCurrentMonth.AddMonths(1).AddDays(-1).Day;
             if (dateNow.Day != LastDayMonth)
-                return _messageError.AddWithReturn<bool>("Opss... só é permitido adicionar os juros da divida no ultimo dia do mes!");
+                return _messageError.AddWithReturn<bool>("Opss... só é permitido adicionar os juros da divida no ultimo dia do mes!", "error");
 
             var debitEntity = _debitRepository.Get(x => x.Active == true).FirstOrDefault();
             if (debitEntity == null)
-                return _messageError.AddWithReturn<bool>("Não existe nenhum debito ativo!");
+                return _messageError.AddWithReturn<bool>("Não existe nenhum debito ativo!", "error");
 
             if (debitEntity.CreationDate.Day == dateNow.Day)
-                return _messageError.AddWithReturn<bool>("Ops... já foi adicionado o juros do mês!");
+                return _messageError.AddWithReturn<bool>("Ops... já foi adicionado o juros do mês!", "error");
 
             debitEntity.LastUpdateDate = DateTime.Now;
             debitEntity.Active = false;
@@ -71,14 +71,14 @@ namespace SingleDebtControl.Domain.Service.Debit
         public int Post(DebitDto dto)
         {
             if (dto == null)
-                return _messageError.AddWithReturn<int>("Ops... dados não informados para realizar o cadastro!");
+                return _messageError.AddWithReturn<int>("Ops... dados não informados para realizar o cadastro!", "error");
 
             if (dto.IsValid(_messageError))
                 return default;
 
             var debitEntity = _debitRepository.Get(x => x.Active == true).FirstOrDefault();
             if (debitEntity != null)
-                return _messageError.AddWithReturn<int>("Ops... já existe uma divida ativa!");
+                return _messageError.AddWithReturn<int>("Ops... já existe uma divida ativa!", "error");
 
             dto.LastUpdateDate = DateTime.Now;
             dto.CreationDate = DateTime.Now;
@@ -89,17 +89,17 @@ namespace SingleDebtControl.Domain.Service.Debit
         public bool Put(DebitDto dto)
         {
             if (dto == null)
-                return _messageError.AddWithReturn<bool>("Ops... dados não informados para realizar update!");
+                return _messageError.AddWithReturn<bool>("Ops... dados não informados para realizar update!", "error");
 
             if (dto.Id <= 0)
-                return _messageError.AddWithReturn<bool>("Ops... é obrigatório informar o debito!");
+                return _messageError.AddWithReturn<bool>("Ops... é obrigatório informar o debito!", "error");
 
             if (dto.IsValid(_messageError))
                 return default;
 
             var debitEntity = _debitRepository.Get(x => x.Id == dto.Id).FirstOrDefault();
             if (debitEntity == null)
-                return _messageError.AddWithReturn<bool>("Não localizamos a divida para realizarmos o update!");
+                return _messageError.AddWithReturn<bool>("Não localizamos a divida para realizarmos o update!", "error");
 
             dto.LastUpdateDate = DateTime.Now;
             _debitRepository.Put(_mapper.Map<DebitEntity>(dto));

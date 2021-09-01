@@ -10,9 +10,9 @@ namespace SingleDebtControl.Api.Controllers
     public class PaymentController : Controller
     {
         private readonly IPaymentService _paymentService;
-        private IMessageErrorService _messageError;
+        private IMessageService _messageError;
 
-        public PaymentController(IPaymentService paymentService, IMessageErrorService messageError)
+        public PaymentController(IPaymentService paymentService, IMessageService messageError)
         {
             _paymentService = paymentService;
             _messageError = messageError;
@@ -32,7 +32,7 @@ namespace SingleDebtControl.Api.Controllers
             var response = _paymentService.Post(dto);
 
             if (_messageError.Any())
-                return BadRequest(new { message = _messageError.GetMessageError() });
+                return BadRequest(new { messages = _messageError.GetMessageError() });
 
             return Ok(new { response });
         }
@@ -43,7 +43,7 @@ namespace SingleDebtControl.Api.Controllers
             var response = _paymentService.Put(dto);
 
             if (_messageError.Any())
-                return BadRequest(new { message = _messageError.GetMessageError() });
+                return BadRequest(new { messages = _messageError.GetMessageError() });
 
             return Ok();
         }
