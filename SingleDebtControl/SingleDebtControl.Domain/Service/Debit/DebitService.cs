@@ -13,9 +13,9 @@ namespace SingleDebtControl.Domain.Service.Debit
     {
         private readonly IMapper _mapper;
         private readonly IDebitRepository _debitRepository;
-        private readonly IMessageService _messageError;
+        private readonly INotification _messageError;
 
-        public DebitService(IMapper mapper, IDebitRepository debitRepository, IMessageService messageError)
+        public DebitService(IMapper mapper, IDebitRepository debitRepository, INotification messageError)
         {
             _mapper = mapper;
             _debitRepository = debitRepository;
@@ -27,8 +27,8 @@ namespace SingleDebtControl.Domain.Service.Debit
             var dateNow = DateTime.Now;
             var dateCurrentMonth = new DateTime(dateNow.Year, dateNow.Month, 1);
 
-            var LastDayMonth = dateCurrentMonth.AddMonths(1).AddDays(-1).Day;
-            if (dateNow.Day != LastDayMonth)
+            var lastDayMonth = dateCurrentMonth.AddMonths(1).AddDays(-1).Day;
+            if (dateNow.Day != lastDayMonth)
                 return _messageError.AddWithReturn<bool>("Opss... só é permitido adicionar os juros da divida no ultimo dia do mes!", "error");
 
             var debitEntity = _debitRepository.Get(x => x.Active == true).FirstOrDefault();

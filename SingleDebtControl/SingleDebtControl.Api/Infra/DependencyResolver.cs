@@ -57,7 +57,7 @@ namespace SingleDebtControl.Api.Infra
         {
             services.AddScoped<IDebitService, DebitService>();
             services.AddScoped<IPaymentService, PaymentService>();
-            services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<INotification, Notification>();
         }
     }
 }

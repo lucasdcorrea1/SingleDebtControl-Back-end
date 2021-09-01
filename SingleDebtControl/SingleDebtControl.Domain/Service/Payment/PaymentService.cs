@@ -16,9 +16,9 @@ namespace SingleDebtControl.Domain.Service.Payment
         private readonly IMapper _mapper;
         private readonly IPaymentRepository _paymentRepository;
         private readonly IDebitRepository _debitRepository;
-        private readonly IMessageService _messageError;
+        private readonly INotification _messageError;
 
-        public PaymentService(IMapper mapper, IPaymentRepository paymentRepository, IDebitRepository debitRepository, IMessageService messageError)
+        public PaymentService(IMapper mapper, IPaymentRepository paymentRepository, IDebitRepository debitRepository, INotification messageError)
         {
             _mapper = mapper;
             _paymentRepository = paymentRepository;

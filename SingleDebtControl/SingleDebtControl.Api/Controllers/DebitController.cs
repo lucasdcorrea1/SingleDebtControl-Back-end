@@ -10,9 +10,9 @@ namespace SingleDebtControl.Api.Controllers
     public class DebitController : Controller
     {
         private readonly IDebitService _debitService;
-        private readonly IMessageService _messageError;
+        private readonly INotification _messageError;
 
-        public DebitController(IDebitService debitService, IMessageService messageError)
+        public DebitController(IDebitService debitService, INotification messageError)
         {
             _debitService = debitService;
             _messageError = messageError;

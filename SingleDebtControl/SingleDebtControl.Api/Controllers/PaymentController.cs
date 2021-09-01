@@ -10,9 +10,9 @@ namespace SingleDebtControl.Api.Controllers
     public class PaymentController : Controller
     {
         private readonly IPaymentService _paymentService;
-        private IMessageService _messageError;
+        private INotification _messageError;
 
-        public PaymentController(IPaymentService paymentService, IMessageService messageError)
+        public PaymentController(IPaymentService paymentService, INotification messageError)
         {
             _paymentService = paymentService;
             _messageError = messageError;
