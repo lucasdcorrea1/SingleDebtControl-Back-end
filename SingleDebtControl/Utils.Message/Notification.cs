@@ -3,24 +3,24 @@ using System.Linq;
 
 namespace Utils.Message
 {
-    public class MessageService : IMessageService
+    public class Notification : INotification
     {
-        private List<DomainMessage> _messagesErrors;
-        public MessageService()
+        private List<DomainNotification> _messagesErrors;
+        public Notification()
         {
-            _messagesErrors = new List<DomainMessage>();
+            _messagesErrors = new List<DomainNotification>();
         }
 
         public virtual void Add(string message, string type)
         {
-            _messagesErrors.Add(new DomainMessage(message, type));
+            _messagesErrors.Add(new DomainNotification(message, type));
         }
 
-        public virtual List<DomainMessage> GetMessageError() => _messagesErrors;
+        public virtual List<DomainNotification> GetMessageError() => _messagesErrors;
 
         public virtual T AddWithReturn<T>(string message, string type)
         {
-            _messagesErrors.Add(new DomainMessage(message, type));
+            _messagesErrors.Add(new DomainNotification(message, type));
 
             return default(T);
         }
@@ -35,11 +35,11 @@ namespace Utils.Message
             return default;
         }
     }
-    public class DomainMessage
+    public class DomainNotification
     {
         public string Value { get; }
         public string Type { get; }
-        public DomainMessage(string error, string type)
+        public DomainNotification(string error, string type)
         {
             Value = error;
             Type = type;

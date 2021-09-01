@@ -2,10 +2,10 @@
 
 namespace Utils.Message
 {
-    public interface IMessageService
+    public interface INotification
     {
         void Add(string message, string type);
-        List<DomainMessage> GetMessageError();
+        List<DomainNotification> GetMessageError();
         bool Valid(bool condition, string message, string type);
         T AddWithReturn<T>(string message, string type);
         bool Any();
