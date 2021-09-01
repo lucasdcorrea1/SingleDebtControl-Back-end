@@ -5,10 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using SingleDebtControl.Api.Hangfire;
 using SingleDebtControl.Api.Infra;
-using SingleDebtControl.Domain.Service.Debit;
 using System;
-using Utils.Environments;
 
 namespace SingleDebtControl.Api
 {
@@ -24,8 +23,6 @@ namespace SingleDebtControl.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var parameters = new Parameters();
-
             #region Cors
 
             services.AddSignalR();
@@ -94,8 +91,7 @@ namespace SingleDebtControl.Api
 
             app.UseHangfireDashboard();
 
-            var debitService = ServiceProvider.GetService<IDebitService>();
-            RecurringJob.AddOrUpdate(() => debitService.AddTax(), Cron.DayInterval(1));
+            ServiceProvider.StartHangFireTasks(app);
         }
     }
 }
